@@ -1,0 +1,83 @@
+local UILibrary = {}
+
+-- Tạo GUI
+function UILibrary:CreateWindow(title)
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Name = "CustomUI"
+
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 400, 0, 300)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Parent = ScreenGui
+
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = title or "UI Library"
+    TitleLabel.TextSize = 18
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Parent = MainFrame
+
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Parent = MainFrame
+    UIListLayout.Padding = UDim.new(0, 5)
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local UI = {MainFrame = MainFrame, ScreenGui = ScreenGui}
+    
+    function UI:CreateButton(text, callback)
+        local Button = Instance.new("TextButton")
+        Button.Size = UDim2.new(1, -10, 0, 40)
+        Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        Button.Text = text
+        Button.TextSize = 16
+        Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Button.Font = Enum.Font.Gotham
+        Button.Parent = MainFrame
+
+        Button.MouseButton1Click:Connect(function()
+            if callback then
+                callback()
+            end
+        end)
+    end
+
+    function UI:CreateToggle(text, callback)
+        local Toggle = Instance.new("TextButton")
+        Toggle.Size = UDim2.new(1, -10, 0, 40)
+        Toggle.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        Toggle.Text = text .. " [OFF]"
+        Toggle.TextSize = 16
+        Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Toggle.Font = Enum.Font.Gotham
+        Toggle.Parent = MainFrame
+
+        local isOn = false
+        Toggle.MouseButton1Click:Connect(function()
+            isOn = not isOn
+            Toggle.Text = text .. (isOn and " [ON]" or " [OFF]")
+            if callback then
+                callback(isOn)
+            end
+        end)
+    end
+
+    function UI:CreateLabel(text)
+        local Label = Instance.new("TextLabel")
+        Label.Size = UDim2.new(1, -10, 0, 30)
+        Label.BackgroundTransparency = 1
+        Label.Text = text
+        Label.TextSize = 14
+        Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+        Label.Font = Enum.Font.Gotham
+        Label.Parent = MainFrame
+    end
+
+    return UI
+end
+
+return UILibrary
